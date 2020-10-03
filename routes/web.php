@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,9 +24,13 @@ Route::get('/contact-us', function () {
 });
 
 Route::get('/about-us', function () {
-    return view('static-pages.aboutus');
+    return view('static-pages.aboutus',[
+        'articles' =>App\Article::take(3)->latest()->get()
+    ]);
 });
 
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{article}', [ArticleController::class, 'show']);
 
 
 Route::get('/post/{post}', 'PostController@show');

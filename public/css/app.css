@@ -1,0 +1,5 @@
+.actions-read-more {
+    width: 75rem;
+    max-width: calc(100% - 6rem);
+    margin: 0 auto 10px;
+}

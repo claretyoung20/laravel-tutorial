@@ -2,7 +2,7 @@
 
 @section('header')
     <header id="header">
-        <a class="logo" href="index.html">Industrious</a>
+        <a class="logo" href="/">Industrious</a>
         <nav>
             <a href="#menu">Menu</a>
         </nav>
@@ -11,11 +11,13 @@
 
 
 @section('nav-bar')
-    <nav id="menu">
+    <nav id="menu" style="height: fit-content;">
         <ul class="links">
             <li class="{{ Request::path() === '/' ? 'current-page': '' }}"><a href="/">Home</a></li>
             <li class="{{ Request::is('about-us') ? 'current-page': '' }}" ><a href="/about-us">About Us</a></li>
             <li class="{{ Request::path() === 'contact-us' ? 'current-page': '' }}"><a href="/contact-us">Contact Us</a></li>
+            <li class="{{ Request::path() === 'articles/1' ? 'current-page': '' }}" ><a href="/articles">Articles</a></li>
+
         </ul>
     </nav>
 @endsection
