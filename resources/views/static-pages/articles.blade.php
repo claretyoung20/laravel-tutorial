@@ -6,7 +6,7 @@
         <a href="/articles/create" class="button alt" style="color: white !important; background-color: green !important;">Create New Article</a>
     </div>
     <section id="one" style="width: 60%">
-        @foreach($articles as $article)
+        @forelse($articles as $article)
             <div class="inner" style="padding-top: 30px">
                 <header>
                     <h2>{{ $article->title }}</h2>
@@ -17,7 +17,9 @@
             <div class="actions-read-more">
                 <a href="{{route('articles.show', $article)}}" class="button alt">Read More</a>
             </div>
-        @endforeach
+        @empty
+            <p>No Article available</p>
+        @endforelse
     </section>
 
 @endsection

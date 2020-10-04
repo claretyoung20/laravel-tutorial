@@ -32,7 +32,7 @@ Route::get('/about-us', function () {
 Route::get('/post/{post}', 'PostController@show');
 Route::get('/user/{user}', 'UserController@show');
 
-Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::post('/articles', [ArticleController::class, 'store']);
 Route::get('/articles/create', [ArticleController::class, 'create']);
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');

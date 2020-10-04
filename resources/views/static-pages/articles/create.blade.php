@@ -48,6 +48,24 @@
                     </div>
 
                     <div class="field">
+                        <label class="label" for="body">Tags</label>
+
+                        <div class="content">
+                            <select name="tags[]" multiple="multiple">
+
+                                @foreach($tags as  $tag)
+                                    <option value="{{ $tag->id }}"> {{ $tag->name }}</option>
+                                @endforeach
+
+                            </select>
+
+                            @error('tags')
+                            <p class="is-danger"> {{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="field">
                         <br><br>
                         <div class="content">
                             <button class="button" type="submit">Submit</button>

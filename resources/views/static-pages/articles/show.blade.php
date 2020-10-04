@@ -14,6 +14,12 @@
                 <img src="/images/banner.jpg" width="100%">
                 <p>{{ $article->body }}</p>
 
+                <p>
+                    @foreach($article->tags as $tag)
+                        <a href="{{ route('articles.index', ['tag'=>$tag->name]) }}">{{ $tag->name }}</a>
+                    @endforeach
+                </p>
+
             </div>
     </section>
 

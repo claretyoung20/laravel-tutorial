@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Tag;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
+use function GuzzleHttp\Promise\all;
 
 class ArticleController extends Controller
 {
@@ -20,6 +22,10 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        if(\request('tag')) {
+            $articles = Tag::where('name', \request('tag'))->firstOrFail()->articles;
+            return view('static-pages.articles', [ 'articles' => $articles]);
+        }
         return view('static-pages.articles', [ 'articles' => Article::latest()->get()]);
     }
 
@@ -30,7 +36,9 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('static-pages.articles.create');
+        return view('static-pages.articles.create', [
+            'tags' => Tag::all()
+        ]);
     }
 
     /**
@@ -41,7 +49,13 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        Article::create($this->getValidateData($request));
+
+        $this->getValidateData($request);
+        $article =  new Article(\request(['title'], 'excerpt', 'body'));
+        $article->user_id = 1;
+        $article->save();
+
+        $article->tags()->attach(\request('tags'));
 
         return  redirect('/articles');
     }
@@ -79,7 +93,9 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        $article->update($this->getValidateData($request));
+
+        $this->getValidateData($request);
+        $article->update(\request(['title'], 'excerpt', 'body'));
 
         return  redirect($article->path());
     }
@@ -105,7 +121,8 @@ class ArticleController extends Controller
         return $request->validate([
             'title' => ['required', 'min:3', 'max:50'],
             'excerpt' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'tags' => 'exists:tags,id'
         ]);
     }
 }
