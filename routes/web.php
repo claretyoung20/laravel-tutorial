@@ -29,10 +29,13 @@ Route::get('/about-us', function () {
     ]);
 });
 
-Route::get('/articles', [ArticleController::class, 'index']);
-Route::get('/articles/{article}', [ArticleController::class, 'show']);
-
-
 Route::get('/post/{post}', 'PostController@show');
-
 Route::get('/user/{user}', 'UserController@show');
+
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::post('/articles', [ArticleController::class, 'store']);
+Route::get('/articles/create', [ArticleController::class, 'create']);
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/articles/{article}/edit', [ArticleController::class, 'edit']);
+Route::put('/articles/{article}', [ArticleController::class, 'update']);
+Route::get('/articles/{article}/delete', [ArticleController::class, 'destroy']);
