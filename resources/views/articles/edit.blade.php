@@ -37,6 +37,27 @@
                     </div>
 
                     <div class="field">
+                        <label class="label" for="body">Tags</label>
+
+                        <div class="content">
+                            <select name="tags[]" multiple="multiple">
+
+                                @foreach($tags as  $tag)
+                                    <option value="{{ $tag->id }}"
+                                            {{ $article->tags->contains($tag->id) ? 'selected': ''}}>
+                                        {{ $tag->name }}</option>
+                                @endforeach
+
+                            </select>
+
+                            @error('tags')
+                            <p class="is-danger"> {{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+
+                    <div class="field">
                         <br><br>
                         <div class="content">
                             <button class="button" type="submit">Edit</button>

@@ -24,9 +24,9 @@ class ArticleController extends Controller
     {
         if(\request('tag')) {
             $articles = Tag::where('name', \request('tag'))->firstOrFail()->articles;
-            return view('static-pages.articles', [ 'articles' => $articles]);
+            return view('articles.index', [ 'articles' => $articles]);
         }
-        return view('static-pages.articles', [ 'articles' => Article::latest()->get()]);
+        return view('articles.index', [ 'articles' => Article::latest()->get()]);
     }
 
     /**
@@ -36,7 +36,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('static-pages.articles.create', [
+        return view('articles.create', [
             'tags' => Tag::all()
         ]);
     }
@@ -51,7 +51,7 @@ class ArticleController extends Controller
     {
 
         $this->getValidateData($request);
-        $article =  new Article(\request(['title'], 'excerpt', 'body'));
+        $article =  new Article(\request(['title', 'excerpt', 'body']));
         $article->user_id = 1;
         $article->save();
 
@@ -68,7 +68,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        return view('static-pages.articles.show', ['article' => $article]);
+        return view('articles.show', ['article' => $article]);
     }
 
     /**
@@ -79,8 +79,9 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        return view('static-pages.articles.edit', [
-            'article' => $article
+        return view('articles.edit', [
+            'article' => $article,
+            'tags' => Tag::all()
         ]);
     }
 
@@ -95,7 +96,13 @@ class ArticleController extends Controller
     {
 
         $this->getValidateData($request);
-        $article->update(\request(['title'], 'excerpt', 'body'));
+        $article->update(\request(['title', 'excerpt', 'body']));
+        $tags = $article->tags();
+
+        foreach ($tags->get() as $tag) {
+            $article->tags()->detach($tag);
+        }
+        $article->tags()->attach(\request('tags'));
 
         return  redirect($article->path());
     }
